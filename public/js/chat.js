@@ -1,154 +1,150 @@
 const socket = io("http://localhost:3000");
+var idChatRoom = "";
 
-socket.on("chat_started", (data) => {
-  console.log(data);
-});
+function onLoad() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const name = urlParams.get("name");
+  const email = urlParams.get("email");
+  const avatar = urlParams.get("avatar");
 
-// var idChatRoom = "";
+  //   document.querySelector(".user_logged").innerHTML += `
+  //       <img
+  //         class="avatar_user_logged"
+  //         src=${avatar}
+  //       />
+  //       <strong id="user_logged">${name}</strong>
+  // `;
 
-// function onLoad() {
-//   const urlParams = new URLSearchParams(window.location.search);
-//   const name = urlParams.get("name");
-//   const email = urlParams.get("email");
-//   const avatar = urlParams.get("avatar");
+  socket.emit("start", {
+    name,
+    email,
+    avatar,
+  });
 
-//   document.querySelector(".user_logged").innerHTML += `
-//       <img
-//         class="avatar_user_logged"
-//         src=${avatar}
-//       />
-//       <strong id="user_logged">${name}</strong>
-// `;
+  //   socket.on("new_users", (user) => {
+  //     const existInDiv = document.getElementById(`user_${user._id}`);
 
-//   socket.emit("start", {
-//     name,
-//     email,
-//     avatar,
-//   });
+  //     if (!existInDiv) {
+  //       addUser(user);
+  //     }
+  //   });
 
-//   socket.on("new_users", (user) => {
-//     const existInDiv = document.getElementById(`user_${user._id}`);
+  //   socket.emit("get_users", (users) => {
+  //     console.log("getUsers", users);
 
-//     if (!existInDiv) {
-//       addUser(user);
-//     }
-//   });
+  //     users.map((user) => {
+  //       if (user.email !== email) {
+  //         addUser(user);
+  //       }
+  //     });
+  //   });
 
-//   socket.emit("get_users", (users) => {
-//     console.log("getUsers", users);
+  //   socket.on("message", (data) => {
+  //     if (data.message.roomId === idChatRoom) {
+  //       addMessage(data);
+  //     }
+  //   });
 
-//     users.map((user) => {
-//       if (user.email !== email) {
-//         addUser(user);
-//       }
-//     });
-//   });
+  //   socket.on("notification", (data) => {
+  //     if (data.roomId !== idChatRoom) {
+  //       const user = document.getElementById(`user_${data.from._id}`);
 
-//   socket.on("message", (data) => {
-//     if (data.message.roomId === idChatRoom) {
-//       addMessage(data);
-//     }
-//   });
+  //       user.insertAdjacentHTML(
+  //         "afterbegin",
+  //         `
+  //         <div class="notification"></div>
+  //       `
+  //       );
+  //     }
+  //   });
+  // }
 
-//   socket.on("notification", (data) => {
-//     if (data.roomId !== idChatRoom) {
-//       const user = document.getElementById(`user_${data.from._id}`);
+  // function addMessage(data) {
+  //   const divMessageUser = document.getElementById("message_user");
 
-//       user.insertAdjacentHTML(
-//         "afterbegin",
-//         `
-//         <div class="notification"></div>
-//       `
-//       );
-//     }
-//   });
-// }
+  //   divMessageUser.innerHTML += `
+  //   <span class="user_name user_name_date">
+  //   <img
+  //     class="img_user"
+  //     src=${data.user.avatar}
+  //   />
+  //   <strong>${data.user.name} &nbsp;</strong>
+  //   <span> ${dayjs(data.message.created_at).format(
+  //     "DD/MM/YYYY HH:mm"
+  //   )}</span></span
+  //   >
+  //   <div class="messages">
+  //     <span class="chat_message">${data.message.text}</span>
+  //   </div>
+  //   `;
+  // }
 
-// function addMessage(data) {
-//   const divMessageUser = document.getElementById("message_user");
+  // function addUser(user) {
+  //   const userList = document.getElementById("users_list");
 
-//   divMessageUser.innerHTML += `
-//   <span class="user_name user_name_date">
-//   <img
-//     class="img_user"
-//     src=${data.user.avatar}
-//   />
-//   <strong>${data.user.name} &nbsp;</strong>
-//   <span> ${dayjs(data.message.created_at).format(
-//     "DD/MM/YYYY HH:mm"
-//   )}</span></span
-//   >
-//   <div class="messages">
-//     <span class="chat_message">${data.message.text}</span>
-//   </div>
-//   `;
-// }
+  //   userList.innerHTML += `
+  //     <li
+  //     class="user_name_list"
+  //     id="user_${user._id}"
+  //     idUser="${user._id}"
+  //     >
+  //       <img
+  //         class="nav_avatar"
+  //         src=${user.avatar}
+  //       />
+  //     ${user.name}
+  //   </li>
+  //   `;
+  // }
 
-// function addUser(user) {
-//   const userList = document.getElementById("users_list");
+  // document.getElementById("users_list").addEventListener("click", (e) => {
+  //   document.getElementById("message_user").innerHTML = "";
+  //   document
+  //     .querySelectorAll("li.user_name_list")
+  //     .forEach((item) => item.classList.remove("user_in_focus"));
+  //   const inputMessage = document.getElementById("user_message");
+  //   inputMessage.classList.remove("hidden");
 
-//   userList.innerHTML += `
-//     <li
-//     class="user_name_list"
-//     id="user_${user._id}"
-//     idUser="${user._id}"
-//     >
-//       <img
-//         class="nav_avatar"
-//         src=${user.avatar}
-//       />
-//     ${user.name}
-//   </li>
-//   `;
-// }
+  //   if (e.target && e.target.matches("li.user_name_list")) {
+  //     const idUser = e.target.getAttribute("idUser");
 
-// document.getElementById("users_list").addEventListener("click", (e) => {
-//   document.getElementById("message_user").innerHTML = "";
-//   document
-//     .querySelectorAll("li.user_name_list")
-//     .forEach((item) => item.classList.remove("user_in_focus"));
-//   const inputMessage = document.getElementById("user_message");
-//   inputMessage.classList.remove("hidden");
+  //     e.target.classList.add("user_in_focus");
 
-//   if (e.target && e.target.matches("li.user_name_list")) {
-//     const idUser = e.target.getAttribute("idUser");
+  //     const notification = document.querySelector(
+  //       `#user_${idUser} .notification`
+  //     );
+  //     if (notification) {
+  //       notification.remove();
+  //     }
 
-//     e.target.classList.add("user_in_focus");
+  //     socket.emit("start_chat", { idUser }, (response) => {
+  //       idChatRoom = response.room.idChatRoom;
 
-//     const notification = document.querySelector(
-//       `#user_${idUser} .notification`
-//     );
-//     if (notification) {
-//       notification.remove();
-//     }
+  //       response.messages.forEach((message) => {
+  //         const data = {
+  //           message,
+  //           user: message.to,
+  //         };
 
-//     socket.emit("start_chat", { idUser }, (response) => {
-//       idChatRoom = response.room.idChatRoom;
+  //         addMessage(data);
+  //       });
+  //     });
+  //   }
+  // });
 
-//       response.messages.forEach((message) => {
-//         const data = {
-//           message,
-//           user: message.to,
-//         };
+  // document.getElementById("user_message").addEventListener("keypress", (e) => {
+  //   if (e.key === "Enter") {
+  //     const message = e.target.value;
+  //     e.target.value = "";
 
-//         addMessage(data);
-//       });
-//     });
-//   }
-// });
+  //     const data = {
+  //       message,
+  //       idChatRoom,
+  //     };
 
-// document.getElementById("user_message").addEventListener("keypress", (e) => {
-//   if (e.key === "Enter") {
-//     const message = e.target.value;
-//     e.target.value = "";
+  //     socket.emit("message", data);
+  //   }
+  // });
+}
 
-//     const data = {
-//       message,
-//       idChatRoom,
-//     };
-
-//     socket.emit("message", data);
-//   }
-// });
-
-// onLoad();
+onLoad();

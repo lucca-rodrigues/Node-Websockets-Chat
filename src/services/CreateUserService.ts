@@ -1,4 +1,3 @@
-import { injectable } from "tsyringe";
 import { User } from "../schemas/User";
 
 interface CreateUserDTO {
@@ -7,7 +6,7 @@ interface CreateUserDTO {
   avatar: string;
   name: string;
 }
-@injectable()
+
 class CreateUserUseService {
   async execute({ email, socket_id, avatar, name }: CreateUserDTO) {
     const userAlreadyExists = await User.findOne({
@@ -21,6 +20,9 @@ class CreateUserUseService {
         },
         {
           $set: { socket_id, avatar, name },
+        },
+        {
+          new: true,
         }
       );
       return user;
