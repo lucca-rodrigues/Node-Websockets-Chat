@@ -42,38 +42,66 @@ function onLoad() {
   });
 
   socket.on("message", (data) => {
-    // if (data.message.roomId === idChatRoom) {
-    //   addMessage(data);
-    // }
+    if (data.message.roomId === idChatRoom) {
+      addMessage(data);
+    }
     console.log(data);
   });
+}
+
+function addMessage(data) {
+  const divMessageUser = document.getElementById("message_user");
+
+  divMessageUser.innerHTML += `
+  <span class="user_name user_name_date">
+  <img
+    class="img_user"
+    src=${data.user.avatar}
+  />
+  <strong>${data.user.name} &nbsp;</strong>
+  <span> ${dayjs(data.message.created_at).format(
+    "DD/MM/YYYY HH:mm"
+  )}</span></span
+  >
+  <div class="messages">
+    <span class="chat_message">${data.message.text}</span>
+  </div>
+  `;
 }
 
 function addUser(user) {
   const userList = document.getElementById("users_list");
 
   userList.innerHTML += `
-      <li
-      class="user_name_list"
-      id="user_${user._id}"
-      idUser="${user._id}"
-      >
-        <img
-          class="nav_avatar"
-          src=${user.avatar}
-        />
-      ${user.name}
-    </li>
-    `;
+    <li
+    class="user_name_list"
+    id="user_${user._id}"
+    idUser="${user._id}"
+    >
+      <img
+        class="nav_avatar"
+        src=${user.avatar}
+      />
+    ${user.name}
+  </li>
+  `;
 }
 
 document.getElementById("users_list").addEventListener("click", (e) => {
+  document.getElementById("message_user").innerHTML = "";
+  const inputMessage = document.getElementById("user_message");
+  inputMessage.classList.remove("hidden");
+
   if (e.target && e.target.matches("li.user_name_list")) {
     // Ao clicar em um item da lista
-    const idUser = e.target.getAttribute("idUser"); // Pega o Id do usuário
+    const idUser = e.target.getAttribute("idUser");
+
     console.log("idUser", idUser);
 
-    socket.emmit("start_chat", { idUser }, (data) => {});
+    socket.emmit("start_chat", { idUser }, (data) => {
+      console.log(data);
+      idChatRoom = data.room.idChatRoom;
+    });
   }
 });
 
