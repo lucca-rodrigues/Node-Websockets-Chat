@@ -100,41 +100,6 @@ function onLoad() {
 //   `;
 // }
 
-// document.getElementById("users_list").addEventListener("click", (e) => {
-//   document.getElementById("message_user").innerHTML = "";
-//   document
-//     .querySelectorAll("li.user_name_list")
-//     .forEach((item) => item.classList.remove("user_in_focus"));
-//   const inputMessage = document.getElementById("user_message");
-//   inputMessage.classList.remove("hidden");
-
-//   if (e.target && e.target.matches("li.user_name_list")) {
-//     const idUser = e.target.getAttribute("idUser");
-
-//     e.target.classList.add("user_in_focus");
-
-//     const notification = document.querySelector(
-//       `#user_${idUser} .notification`
-//     );
-//     if (notification) {
-//       notification.remove();
-//     }
-
-//     socket.emit("start_chat", { idUser }, (response) => {
-//       idChatRoom = response.room.idChatRoom;
-
-//       response.messages.forEach((message) => {
-//         const data = {
-//           message,
-//           user: message.to,
-//         };
-
-//         addMessage(data);
-//       });
-//     });
-//   }
-// });
-
 // document.getElementById("user_message").addEventListener("keypress", (e) => {
 //   if (e.key === "Enter") {
 //     const message = e.target.value;
@@ -148,8 +113,6 @@ function onLoad() {
 //     socket.emit("message", data);
 //   }
 // });
-
-onLoad();
 
 function addUser(user) {
   const userList = document.getElementById("users_list");
@@ -168,3 +131,17 @@ function addUser(user) {
     </li>
     `;
 }
+
+document.getElementById("users_list").addEventListener("click", (e) => {
+  if (e.target && e.target.matches("li.user_name_list")) {
+    // Ao clicar em um item da lista
+    const idUser = e.target.getAttribute("idUser"); // Pega o Id do usuário
+    console.log("idUser", idUser);
+
+    socket.emmit("start_chat", { idUser }, (data) => {
+      console.log(data);
+    });
+  }
+});
+
+onLoad();

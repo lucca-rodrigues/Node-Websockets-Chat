@@ -1,8 +1,9 @@
 import mongoose, { Document, Schema } from "mongoose";
+import { User } from "./User";
 import { v4 as uuid } from "uuid";
 
 type ChatRoom = Document & {
-  idUsers: string;
+  idUsers: User[];
   idChatRoom: string;
 };
 
@@ -15,7 +16,7 @@ const ChatRoomSchema = new Schema({
   ],
   idChatRoom: {
     type: String,
-    default: uuid(),
+    default: uuid,
   },
 });
 
