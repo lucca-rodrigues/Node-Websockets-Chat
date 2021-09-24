@@ -42,77 +42,12 @@ function onLoad() {
   });
 
   socket.on("message", (data) => {
-    if (data.message.roomId === idChatRoom) {
-      addMessage(data);
-    }
+    // if (data.message.roomId === idChatRoom) {
+    //   addMessage(data);
+    // }
+    console.log(data);
   });
 }
-
-//   socket.on("notification", (data) => {
-//     if (data.roomId !== idChatRoom) {
-//       const user = document.getElementById(`user_${data.from._id}`);
-
-//       user.insertAdjacentHTML(
-//         "afterbegin",
-//         `
-//         <div class="notification"></div>
-//       `
-//       );
-//     }
-//   });
-// }
-
-// function addMessage(data) {
-//   const divMessageUser = document.getElementById("message_user");
-
-//   divMessageUser.innerHTML += `
-//   <span class="user_name user_name_date">
-//   <img
-//     class="img_user"
-//     src=${data.user.avatar}
-//   />
-//   <strong>${data.user.name} &nbsp;</strong>
-//   <span> ${dayjs(data.message.created_at).format(
-//     "DD/MM/YYYY HH:mm"
-//   )}</span></span
-//   >
-//   <div class="messages">
-//     <span class="chat_message">${data.message.text}</span>
-//   </div>
-//   `;
-// }
-
-// function addUser(user) {
-//   const userList = document.getElementById("users_list");
-
-//   userList.innerHTML += `
-//     <li
-//     class="user_name_list"
-//     id="user_${user._id}"
-//     idUser="${user._id}"
-//     >
-//       <img
-//         class="nav_avatar"
-//         src=${user.avatar}
-//       />
-//     ${user.name}
-//   </li>
-//   `;
-// }
-
-// document.getElementById("user_message").addEventListener("keypress", (e) => {
-//   if (e.key === "Enter") {
-//     const message = e.target.value;
-//     e.target.value = "";
-
-//     const data = {
-//       message,
-//       idChatRoom,
-//     };
-
-//     socket.emit("message", data);
-//   }
-// });
 
 function addUser(user) {
   const userList = document.getElementById("users_list");
@@ -138,9 +73,21 @@ document.getElementById("users_list").addEventListener("click", (e) => {
     const idUser = e.target.getAttribute("idUser"); // Pega o Id do usuário
     console.log("idUser", idUser);
 
-    socket.emmit("start_chat", { idUser }, (data) => {
-      console.log(data);
-    });
+    socket.emmit("start_chat", { idUser }, (data) => {});
+  }
+});
+
+document.getElementById("user_message").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    const message = e.target.value;
+    e.target.value = "";
+
+    const data = {
+      message,
+      idChatRoom,
+    };
+
+    socket.emit("message", data);
   }
 });
 
