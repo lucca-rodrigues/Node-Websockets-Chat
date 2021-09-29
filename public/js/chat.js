@@ -110,7 +110,9 @@ document.getElementById("users_list").addEventListener("click", (e) => {
 
     e.target.classList.add("user_in_focus");
 
-    const notification = document.querySelector(`#user_${idUser}.notification`);
+    const notification = document.querySelector(
+      `#user_${idUser} .notification`
+    );
     if (notification) {
       notification.remove();
     }
