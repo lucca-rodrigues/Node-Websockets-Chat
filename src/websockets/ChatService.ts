@@ -2,18 +2,18 @@ import { container } from "tsyringe";
 import { io } from "../http";
 import mongoose from "mongoose";
 import { CreateChatRoomService } from "../services/CreateChatRoomService";
+import { CreateUserService } from "../services/CreateUserService";
 import { GetAllUsersService } from "../services/GetAllUsersService";
 import { GetUserBySocketIdService } from "../services/GetUserBySocketIdService";
 import { GetChatRoomByUsersService } from "../services/GetChatRoomByUsersService";
 import { CreateMessageService } from "../services/CreateMessageService";
+import { GetMessagesByChatRoomService } from "../services/GetMessagesByChatRoomService";
 import { GetChatRoomByIdService } from "../services/GetChatRoomByIdService";
-import { CreateUserUseService } from "../services/CreateUserService";
-import { GetMessagesByChatRoomService } from "../services/GetMessageByChatRoomService";
 
 io.on("connect", (socket) => {
   socket.on("start", async (data) => {
     const { email, avatar, name } = data;
-    const createUserService = container.resolve(CreateUserUseService);
+    const createUserService = container.resolve(CreateUserService);
 
     const user = await createUserService.execute({
       email,

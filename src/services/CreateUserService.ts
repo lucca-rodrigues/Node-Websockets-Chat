@@ -7,7 +7,7 @@ interface CreateUserDTO {
   name: string;
 }
 
-class CreateUserUseService {
+class CreateUserService {
   async execute({ email, socket_id, avatar, name }: CreateUserDTO) {
     const userAlreadyExists = await User.findOne({
       email,
@@ -39,4 +39,4 @@ class CreateUserUseService {
   }
 }
 
-export { CreateUserUseService };
+export { CreateUserService };
